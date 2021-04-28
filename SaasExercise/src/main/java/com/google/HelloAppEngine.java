@@ -3,6 +3,7 @@ package com.google;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
@@ -47,6 +50,16 @@ public class HelloAppEngine extends HttpServlet {
 	   
 	  
 	  System.out.println("Inside do post");
+	  
+	//Create dataStore instance
+      DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+
+      String userID = (String)req.getParameter("userID");
+
+      ArrayList<String> photoID = new ArrayList<String>(Arrays.asList(req.getParameterValues("imageID")[0].split(",")));
+      ArrayList<String> imageLinks = new ArrayList<String>(Arrays.asList(req.getParameterValues("imageLinks")[0].split(",")));
+
+	  
 	  Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
 	  System.out.println(blobs.toString());
       List<BlobKey> blobKeys = blobs.get("fileName");
